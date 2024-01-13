@@ -3,16 +3,17 @@
 > [Warning : You will lose every type of dns records including MX, TXT, NS]
 
 ### Requirements 
-* IDE 
-* Python3
-* Package : requests 2.29.0 or higher 
+* Windows 7/8/10/11 (64 bit) 
 * Cloudflare API Key 
 * Cloudflare ZONE ID
 
 ### GUIDE 
-1) Replace `YOUR_API_KEY` with the api key you will get from the cloudflare
-2) Replace `YOUR_ZONE_ID` with your zone id 
-3) run the code
+1) Read down to know more where you can find your api key and zone id 
+2) Download the cloudflare-dns-delete.exe file from releases
+3) Run the cloudflare-dns-delete.exe file
+
+### Important 
+My code file has no way to steal and/or store the api key or zone id, Everyone is welcome to explore the application. cloudflare-dns-delete.exe file was actually made from main.py . 
 
 ### Where can I get my Cloudflare API & Zone ID? 
 1) Go to [https://dash.cloudflare.com/](https://dash.cloudflare.com/)
