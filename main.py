@@ -1,22 +1,43 @@
 import requests
 
-# API Key should have the permission to edit DNS
-# Copy Zone ID 1) https://dash.cloudflare.com/ 2) Select The domain from where you want to delete all the DNS 3) Look at the right side to find your zone id
-api_key = "YOUR_API_KEY"
-zone_id = "YOUR_ZONE_ID"
+def get_dns_records(api_key, zone_id):
+    url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+    response = requests.get(url, headers=headers)
+    
+    if response.status_code != 200:
+        print("\nFailed to get DNS records!")
+        print(f"Error: {response.status_code}\n{response.text}")
+        return None
+    
+    return response.json()["result"]
 
-# Get all DNS records using requests
-url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records"
-headers = {
-    "Authorization": f"Bearer {api_key}",
-    "Content-Type": "application/json"
-}
-response = requests.get(url, headers=headers)
-dns_records = response.json()["result"]
-
-# Delete all DNS records 
-for i in dns_records:
-    url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records/{i['id']}"
+def delete_dns_record(api_key, zone_id, record_id):
+    url = f"https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records/{record_id}"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
     response = requests.delete(url, headers=headers)
-    if response.status_code != 204:
-        print(f"{i['type']} - {i['name']}  | Deleted Successfully! ")
+    
+    if response.status_code == 204:
+        print(f"Record ID {record_id} deleted successfully!")
+    else:
+        print(f"Failed to delete record ID {record_id}")
+        print(f"Error: {response.status_code}\n{response.text}")
+
+def main():
+    api_key = input("Enter your API key: ")
+    zone_id = input("Enter your Zone ID: ")
+
+    dns_records = get_dns_records(api_key, zone_id)
+    
+    if dns_records is not None:
+        for record in dns_records:
+            delete_dns_record(api_key, zone_id, record['id'])
+
+if __name__ == "__main__":
+    main()
